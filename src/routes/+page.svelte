@@ -5,9 +5,9 @@ import { Button } from "$lib/components/ui/button/index.js";
 import { Label } from "$lib/components/ui/label/index.js";
 import { Input } from "$lib/components/ui/input/index.js";
 import * as Card from "$lib/components/ui/card/index.js";
-import { LoaderCircle } from "@lucide/svelte";
+import { LoaderCircle, Coffee } from "@lucide/svelte";
 
-let username = "";
+let studentId: number;
 let password = "";
 let message = "";
 let isLoading = false;
@@ -16,19 +16,19 @@ type LoginFields = z.infer<typeof loginSchema>;
 let errors: Partial<Record<keyof LoginFields, string[]>> = {};
 
 const loginSchema = z.object({
-  username: z.string().min(1, "Username is required"),
+  studentId: z.coerce.number().min(4, "invalid id, too short").max(1000000, "invalid id, too long"),
   password: z.string().min(1, "Password is requiered"),
 })
 .strict() // dont allow extra fields from request  
-
 
 async function handleLogin() {
   errors = {}
   message = "";
 
-  const result = loginSchema.safeParse({ username, password });
+  const result = loginSchema.safeParse({ studentId, password });
 
   if (!result.success) {
+    // 'flat' transforms Zod's nested error array into a key-value object
     const flat = result.error.issues.reduce((acc, issue) => {
         const key = issue.path[0] as keyof LoginFields;
         if (key) acc[key] = [...(acc[key] ?? []), issue.message];
@@ -37,48 +37,33 @@ async function handleLogin() {
     errors = flat;
     return;
   }
-
   isLoading = true;
-  try {
-    const response = await fetch("https://nurichvsdiewelt.work/nur/nur-login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username, password })
-    });
-
-    const resultData = await response.json();
-
-    if (response.ok) {
-      message = "Logged in successfully!";
-      console.log("User data:", resultData.user);
-      // Save resultData.user to a store or cookie here
-    } else {
-      message = resultData.error || "Login failed";
-    }
-  } catch (err) {
-    message = "Could not connect to server";
-  } finally {
-    isLoading = false;
-  }
 }
 </script>
 
 <section class="w-screen h-screen">
   <Card.Root class="absolute p-8 w-4xl max-w-sm top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-    <Card.Header>
-      <Card.Title class="text-3xl text-(--customGold)">Login</Card.Title>    
+    <Card.Header class="flex flex-col items-center gap-2">
+    <!-- logo -->
+      <div>
+        <Coffee /> 
+      </div>
+
+    <!-- logo -->
+      <Card.Title class="text-3xl text-(--customGold)">CAMPUSBITE</Card.Title>    
+      <Card.Description>
+        Institutional access
+      </Card.Description>
     </Card.Header>
 
     <form on:submit|preventDefault={handleLogin}>
       <Card.Content>
         <div class="flex flex-col gap-6">
           <div class="grid gap-2">
-            <Label for="nur-username">Username</Label>
-            <!-- TODO: make a funny list of -->
-            <!-- famous people as usernames as placeholders  --> 
-            <Input id="nur-username" bind:value={username} placeholder="Magnus Carlsen" required />
-            {#if errors.username}
-              <p class="text-xs text-red-500">{errors.username[0]}</p>
+            <Label for="cb-studentid">Institutional ID</Label>
+            <Input id="cb-studentid" bind:value={studentId} required />
+            {#if errors.studentId}
+              <p class="text-xs text-red-500">{errors.studentId[0]}</p>
             {/if}
           </div>
 
@@ -87,7 +72,7 @@ async function handleLogin() {
               <Label for="nur-password">Password</Label>
               <Card.Description class="ms-auto inline-block text-sm underline-offset-4 hover:underline">
                 <a
-                  href="##"
+                  href="/forgotPassword"
                 >
                   Forgot your password?
                 </a>
