@@ -7,7 +7,6 @@ import { Input } from "$lib/components/ui/input/index.js";
 import * as Card from "$lib/components/ui/card/index.js";
 import { LoaderCircle, Coffee } from "@lucide/svelte";
 import { supabase } from '$lib/supabase/client';
-import { goto } from '$app/navigation';
 
 let studentId: number;
 let password = "";
