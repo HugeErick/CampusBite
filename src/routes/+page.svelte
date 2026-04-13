@@ -6,6 +6,8 @@ import { Label } from "$lib/components/ui/label/index.js";
 import { Input } from "$lib/components/ui/input/index.js";
 import * as Card from "$lib/components/ui/card/index.js";
 import { LoaderCircle, Coffee } from "@lucide/svelte";
+import { supabase } from '$lib/supabase/client';
+import { goto } from '$app/navigation';
 
 let studentId: number;
 let password = "";
@@ -38,6 +40,8 @@ async function handleLogin() {
     return;
   }
   isLoading = true;
+
+console.log("Supabase ready:", supabase);
 }
 </script>
 
