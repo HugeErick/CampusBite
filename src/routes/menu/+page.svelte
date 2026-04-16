@@ -1,6 +1,6 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
-
+  import { House, UtensilsCrossed, Ellipsis, Clock3 } from '@lucide/svelte/icons';
   type MenuItem = {
     name: string;
     description: string;
@@ -132,40 +132,48 @@
 
       <div class="mt-4 flex items-center justify-between">
         <span class="text-2xl font-bold text-green-600">${item.price}</span>
-        <span class="shrink-0 text-base text-slate-500">🕒 {item.time} min</span>
+        <span class="flex items-center gap-1 shrink-0 text-base text-slate-500">
+         <Clock3 class="w-4 h-4" />
+         {item.time} min
+        </span>
       </div>
     </div>
   </div>
 </article>
   {/each}
 </section>
-
-        
+  
 </div>
-
   <!-- NAVBAR -->
-  <nav class="fixed bottom-0 left-0 right-0 border-t bg-white shadow-md">
-    <div class="mx-auto flex max-w-sm justify-around py-3 text-sm">
-      <button
-        on:click={() => goto('/home')}
-        class="flex flex-col items-center text-slate-500 hover:text-orange-500"
-      >
-        <span class="text-lg">🏠</span>
-        <span class="text-xs">HOME</span>
-      </button>
+  <nav class="fixed bottom-0 left-0 right-0 z-50 border-t bg-white/95 backdrop-blur-sm shadow-md">
+  <div class="mx-auto flex h-20 max-w-sm justify-around px-2 text-sm">
 
-      <button class="flex flex-col items-center text-orange-500">
-        <span class="text-lg">🍽️</span>
-        <span class="text-xs font-medium">MENU</span>
-      </button>
+    <!-- HOME -->
+    <button
+      on:click={() => goto('/home')}
+      class="flex flex-1 flex-col items-center justify-center text-slate-500 hover:text-orange-500"
+    >
+      <House class="h-5 w-5" />
+      <span class="mt-1 text-xs">HOME</span>
+    </button>
 
-      <button
-        on:click={() => goto('/more')}
-        class="flex flex-col items-center text-slate-500 hover:text-orange-500"
-      >
-        <span class="text-lg">⋯</span>
-        <span class="text-xs">MORE</span>
-      </button>
-    </div>
-  </nav>
+    <!-- MENU (ACTIVO) -->
+    <button
+      class="flex flex-1 flex-col items-center justify-center text-orange-500"
+    >
+      <UtensilsCrossed class="h-5 w-5" />
+      <span class="mt-1 text-xs font-medium">MENU</span>
+    </button>
+
+    <!-- MORE -->
+    <button
+      on:click={() => goto('/more')}
+      class="flex flex-1 flex-col items-center justify-center text-slate-500 hover:text-orange-500"
+    >
+      <Ellipsis class="h-5 w-5" />
+      <span class="mt-1 text-xs">MORE</span>
+    </button>
+
+  </div>
+</nav>
 </div>
