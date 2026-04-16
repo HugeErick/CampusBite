@@ -1,4 +1,5 @@
-<script lang="ts"> 
+<script lang="ts">
+import { goto } from '$app/navigation';
 //steps reducidos de funcionamiento
 
   const steps = [
@@ -73,23 +74,32 @@
       </section>
     </div>
   </div>
-  <nav class="fixed bottom-0 left-0 right-0 border-t bg-white shadow-md">
+<nav class="fixed bottom-0 left-0 right-0 border-t bg-white shadow-md">
   <div class="mx-auto flex max-w-sm justify-around py-3 text-sm">
 
     <!-- HOME -->
-    <button class="flex flex-col items-center text-orange-500">
+    <button
+      on:click={() => goto('/home')}
+      class="flex flex-col items-center text-orange-500"
+    >
       <span class="text-lg">🏠</span>
       <span class="text-xs font-medium">HOME</span>
     </button>
 
     <!-- ABOUT -->
-    <button class="flex flex-col items-center text-slate-500 hover:text-orange-500">
+    <button
+      on:click={() => goto('/home/about')}
+      class="flex flex-col items-center text-slate-500 hover:text-orange-500"
+    >
       <span class="text-lg">ℹ️</span>
       <span class="text-xs">ABOUT</span>
     </button>
 
     <!-- MORE -->
-    <button class="flex flex-col items-center text-slate-500 hover:text-orange-500">
+    <button
+      on:click={() => goto('/more')}
+      class="flex flex-col items-center text-slate-500 hover:text-orange-500"
+    >
       <span class="text-lg">⋯</span>
       <span class="text-xs">MORE</span>
     </button>
