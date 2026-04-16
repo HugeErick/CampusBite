@@ -11,13 +11,26 @@ import { goto } from '$app/navigation';
 
   let currentTurn = 5; //temporal simular UI
   let nextTurnIn = '4:02'; //temporal nada más para IU
+  // nuevos estados
+  let showMyTurn = false;
+  let myTurn = 13; // temporal
+  let estimatedWait = 24; // temporal
+  let hasTurn = false; // para crear botón de ya tienes turno 
+
+  function handleGetTurn() {
+  if (hasTurn) return; // evita duplicados
+
+  hasTurn = true;
+  showMyTurn = true;
+}
+
 </script>
 
 <svelte:head>
-  <title>About | CampusBite</title> <!--titulo de la pestaña del navegador-->
+  <title>Home | CampusBite</title> <!--titulo de la pestaña del navegador-->
   <meta
     name="description"
-    content="Conoce más sobre CampusBite, la solución digital para gestionar pedidos en la cafetería universitaria."
+    content="Gestión de turnos en CampusBite."
   />
 </svelte:head>
 
@@ -46,16 +59,43 @@ import { goto } from '$app/navigation';
           <span class="text-xl">Próximo turno en: {nextTurnIn}</span>
         </div>
       </section>
+      
+
+      <!-- Card de mi turno -->
+      {#if showMyTurn}
+        <section class="rounded-3xl bg-gradient-to-b from-orange-500 to-amber-300 px-6 py-6 text-white shadow-md">
+          <div class="mb-3 text-lg font-semibold">Tu Turno</div>
+
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-5xl font-bold">#{myTurn}</p>
+            </div>
+
+            <div class="text-right">
+              <p class="text-sm opacity-90">Espera aproximada</p>
+              <p class="text-3xl font-bold">{estimatedWait} min</p>
+            </div>
+          </div>
+        </section>
+      {/if}
 
       <!-- Botón obtener turno -->
       <button
-        class="w-full rounded-2xl bg-gradient-to-b from-orange-500 to-amber-300 px-6 py-5 text-xl font-bold text-white shadow-md transition hover:scale-[1.01]"
-      >
-        🎟️ Obtener Turno
-      </button>
+      on:click={handleGetTurn}
+      disabled={hasTurn}
+      class={`w-full rounded-2xl px-6 py-5 text-xl font-bold shadow-md transition
+      ${
+        hasTurn
+        ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+        : 'bg-gradient-to-b from-orange-500 to-amber-300 text-white hover:scale-[1.01]'
+      }`}
+  >
+    🎟️ {hasTurn ? 'Turno obtenido' : 'Obtener Turno'}
+  </button>
 
       <!-- Botón ver menú -->
       <button
+        on:click={() => goto('/menu')}
         class="flex w-full items-center justify-center gap-3 rounded-2xl border-2 border-orange-400 bg-[#f7f1e8] px-6 py-5 text-xl font-medium text-orange-500 transition hover:bg-orange-50"
       >
         <span>Ver Menú</span>
@@ -95,7 +135,7 @@ import { goto } from '$app/navigation';
       <span class="text-xs">ABOUT</span>
     </button>
 
-    <!-- MORE -->
+    <!-- MORE --> 
     <button
       on:click={() => goto('/more')}
       class="flex flex-col items-center text-slate-500 hover:text-orange-500"
