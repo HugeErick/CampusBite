@@ -1,5 +1,6 @@
 <script lang="ts">
-import { Clock, GlassWater, CreditCard, Coffee } from '@lucide/svelte/icons';
+import { Clock, GlassWater, CreditCard, Coffee, House, Info, Ellipsis } from '@lucide/svelte/icons';
+import { goto } from '$app/navigation';
   const features = [
   {
     title: 'Sistema de Turnos Inteligente',
@@ -35,7 +36,7 @@ import { Clock, GlassWater, CreditCard, Coffee } from '@lucide/svelte/icons';
   />
 </svelte:head>
 
-<div class="min-h-screen bg-[#f7f1e8] p-6">
+<div class="min-h-screen bg-[#f7f1e8] p-6 pb-28">
   <div class="mx-auto max-w-5xl space-y-6">
     <section class="rounded-3xl bg-gradient-to-r from-orange-500 to-amber-300 p-6 text-white shadow-lg">
       <h1 class="text-3xl font-bold">Acerca de CAMPUSBITE</h1>
@@ -99,4 +100,35 @@ import { Clock, GlassWater, CreditCard, Coffee } from '@lucide/svelte/icons';
       <p>© 2026 Universidad - Todos los derechos reservados</p>
     </footer>
   </div>
+  <nav class="fixed bottom-0 left-0 right-0 z-50 border-t bg-white/95 backdrop-blur-sm shadow-md">
+  <div class="mx-auto flex h-20 max-w-sm justify-around px-2 text-sm">
+
+    <!-- HOME -->
+    <button
+      on:click={() => goto('/home')}
+      class="flex flex-1 flex-col items-center justify-center text-slate-500 hover:text-orange-500"
+    >
+      <House class="h-5 w-5" />
+      <span class="mt-1 text-xs">HOME</span>
+    </button>
+
+    <!-- ABOUT (ACTIVO) -->
+    <button
+      class="flex flex-1 flex-col items-center justify-center text-orange-500"
+    >
+      <Info class="h-5 w-5" />
+      <span class="mt-1 text-xs font-medium">ABOUT</span>
+    </button>
+
+    <!-- MORE -->
+    <button
+      on:click={() => goto('/more')}
+      class="flex flex-1 flex-col items-center justify-center text-slate-500 hover:text-orange-500"
+    >
+      <Ellipsis class="h-5 w-5" />
+      <span class="mt-1 text-xs">MORE</span>
+    </button>
+
+  </div>
+</nav>
 </div>
