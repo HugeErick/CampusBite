@@ -85,13 +85,7 @@ console.log("Supabase ready:", supabase);
             {#if errors.password}
               <p class="text-xs text-red-500">{errors.password[0]}</p>
             {/if}
-            <Card.Description class="hover:underline">
-              <a
-                href="/signUp"
-              >
-                Don't have an Account?
-              </a>
-            </Card.Description>
+        
           </div>
         </div>
       </Card.Content>
