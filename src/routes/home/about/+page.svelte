@@ -122,7 +122,7 @@ import { goto } from '$app/navigation';
 
     <!-- MORE -->
     <button
-      on:click={() => goto('/more')}
+      on:click={() => goto('/home/more')}
       class="flex flex-1 flex-col items-center justify-center text-slate-500 hover:text-orange-500"
     >
       <Ellipsis class="h-5 w-5" />
