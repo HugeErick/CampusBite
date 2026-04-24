@@ -1,0 +1,19 @@
+import { defineConfig, devices } from '@playwright/test';
+
+export default defineConfig({
+  testDir: './tests',
+  fullyParallel: true,
+  reporter: 'html',
+  use: {
+    // REMOVE executablePath: '/usr/bin/firefox'
+    baseURL: 'http://localhost:5173',
+    trace: 'on-first-retry',
+  },
+
+  projects: [
+    {
+      name: 'firefox',
+      use: { ...devices['Desktop Firefox'] },
+    },
+  ],
+});

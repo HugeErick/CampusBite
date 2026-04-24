@@ -1,58 +1,79 @@
 <script lang="ts">
-// login page
-import * as z from "zod";
-import { Button } from "$lib/components/ui/button/index.js";
-import { Label } from "$lib/components/ui/label/index.js";
-import { Input } from "$lib/components/ui/input/index.js";
-import * as Card from "$lib/components/ui/card/index.js";
-import { LoaderCircle, Coffee } from "@lucide/svelte";
-import { supabase } from '$lib/supabase/client';
+  // login page
+  import * as z from "zod";
+  import { Button } from "$lib/components/ui/button/index.js";
+  import { Label } from "$lib/components/ui/label/index.js";
+  import { Input } from "$lib/components/ui/input/index.js";
+  import * as Card from "$lib/components/ui/card/index.js";
+  import { LoaderCircle, Coffee } from "@lucide/svelte";
+  import { supabase } from '$lib/supabase/client';
 
-let studentId: number;
-let password = "";
-let message = "";
-let isLoading = false;
+  let studentId: number;
+  let password = "";
+  let message = "";
+  let isLoading = false;
 
-type LoginFields = z.infer<typeof loginSchema>;
-let errors: Partial<Record<keyof LoginFields, string[]>> = {};
+  type LoginFields = z.infer<typeof loginSchema>;
+  let errors: Partial<Record<keyof LoginFields, string[]>> = {};
 
-const loginSchema = z.object({
-  studentId: z.coerce.number().min(4, "invalid id, too short").max(1000000, "invalid id, too long"),
-  password: z.string().min(1, "Password is requiered"),
-})
-.strict() // dont allow extra fields from request  
+  const loginSchema = z.object({
+    studentId: z.coerce.number().min(4, "invalid id, too short").max(1000000, "invalid id, too long"),
+    password: z.string().min(1, "Password is requiered"),
+  })
+  .strict() // dont allow extra fields from request  
 
-async function handleLogin() {
-  errors = {}
-  message = "";
+  async function handleLogin() {
+    errors = {}
+    message = "";
 
-  const result = loginSchema.safeParse({ studentId, password });
+    const result = loginSchema.safeParse({ studentId, password });
 
-  if (!result.success) {
-    // 'flat' transforms Zod's nested error array into a key-value object
-    const flat = result.error.issues.reduce((acc, issue) => {
+    if (!result.success) {
+      // 'flat' transforms Zod's nested error array into a key-value object
+      const flat = result.error.issues.reduce((acc, issue) => {
         const key = issue.path[0] as keyof LoginFields;
         if (key) acc[key] = [...(acc[key] ?? []), issue.message];
         return acc;
-    }, {} as Partial<Record<keyof LoginFields, string[]>>);
-    errors = flat;
-    return;
-  }
-  isLoading = true;
+      }, {} as Partial<Record<keyof LoginFields, string[]>>);
+      errors = flat;
+      return;
+    }
+    isLoading = true;
 
-console.log("Supabase ready:", supabase);
-}
+    console.log("Supabase ready:", supabase);
+
+    try {
+      const { data, error } = await supabase
+        .from("students")
+        .select("student_id")
+        .eq("student_id", studentId)
+        .single()
+
+      if (error || !data ) {
+        message = "Invalid Institional ID.";
+      } else {
+        message = "Login successfully! Redirecting...";
+        console.log("User found:", data.student_id);
+        setTimeout(() => {
+          window.location.href = "/home";
+        }, 1000);
+      }
+    } catch (err) {
+      message = "connection error.";
+    } finally {
+      isLoading = false;
+    }
+
+  }
 </script>
 
 <section class="w-screen h-screen">
   <Card.Root class="absolute p-8 w-4xl max-w-sm top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
     <Card.Header class="flex flex-col items-center gap-2">
-    <!-- logo -->
       <div>
         <Coffee /> 
       </div>
 
-    <!-- logo -->
       <Card.Title class="text-3xl text-(--customGold)">CAMPUSBITE</Card.Title>    
       <Card.Description>
         Institutional access
@@ -73,19 +94,12 @@ console.log("Supabase ready:", supabase);
           <div class="grid gap-2">
             <div class="flex items-center">
               <Label for="nur-password">Password</Label>
-              <Card.Description class="ms-auto inline-block text-sm underline-offset-4 hover:underline">
-                <a
-                  href="/forgotPassword"
-                >
-                  Forgot your password?
-                </a>
-              </Card.Description>
             </div>
             <Input id="nur-password" bind:value={password} type="password" required />
             {#if errors.password}
               <p class="text-xs text-red-500">{errors.password[0]}</p>
             {/if}
-        
+
           </div>
         </div>
       </Card.Content>

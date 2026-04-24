@@ -1,0 +1,1 @@
+PLAYWRIGHT_SKIP_BROWSER_GC=1 pnpm exec playwright test --ui
