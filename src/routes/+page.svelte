@@ -1,74 +1,28 @@
 <script lang="ts">
-  // login page
-  import * as z from "zod";
+  import { enhance } from "$app/forms";
   import { Button } from "$lib/components/ui/button/index.js";
   import { Label } from "$lib/components/ui/label/index.js";
   import { Input } from "$lib/components/ui/input/index.js";
   import * as Card from "$lib/components/ui/card/index.js";
   import { LoaderCircle, Coffee } from "@lucide/svelte";
-  import { supabase } from '$lib/supabase/client';
+  import type { SubmitFunction } from "./$types";
 
-  let studentId: number;
-  let password = "";
-  let message = "";
-  let isLoading = false;
+  let { form } = $props();
+  let studentId = $state(""); // bind:value works better with $state in Svelte 5
+  let password = $state("");
+  let isLoading = $state(false);
 
-  type LoginFields = z.infer<typeof loginSchema>;
-  let errors: Partial<Record<keyof LoginFields, string[]>> = {};
-
-  const loginSchema = z.object({
-    studentId: z.coerce.number().min(4, "invalid id, too short").max(1000000, "invalid id, too long"),
-    password: z.string().min(1, "Password is requiered"),
-  })
-  .strict() // dont allow extra fields from request  
-
-  async function handleLogin() {
-    errors = {}
-    message = "";
-
-    const result = loginSchema.safeParse({ studentId, password });
-
-    if (!result.success) {
-      // 'flat' transforms Zod's nested error array into a key-value object
-      const flat = result.error.issues.reduce((acc, issue) => {
-        const key = issue.path[0] as keyof LoginFields;
-        if (key) acc[key] = [...(acc[key] ?? []), issue.message];
-        return acc;
-      }, {} as Partial<Record<keyof LoginFields, string[]>>);
-      errors = flat;
-      return;
-    }
+  const handleEnhance: SubmitFunction = () => {
     isLoading = true;
-
-    console.log("Supabase ready:", supabase);
-
-    try {
-      const { data, error } = await supabase
-        .from("students")
-        .select("student_id")
-        .eq("student_id", studentId)
-        .single()
-
-      if (error || !data ) {
-        message = "Invalid Institional ID.";
-      } else {
-        message = "Login successfully! Redirecting...";
-        console.log("User found:", data.student_id);
-        setTimeout(() => {
-          window.location.href = "/home";
-        }, 1000);
-      }
-    } catch (err) {
-      message = "connection error.";
-    } finally {
+    return async ({ update }) => {
       isLoading = false;
-    }
-
-  }
+      await update();
+    };
+  };
 </script>
 
 <section class="w-screen h-screen">
-  <Card.Root class="absolute p-8 w-4xl max-w-sm top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+  <Card.Root class="p-8 w-4xl max-w-sm absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
     <Card.Header class="flex flex-col items-center gap-2">
       <div>
         <Coffee /> 
@@ -80,31 +34,26 @@
       </Card.Description>
     </Card.Header>
 
-    <form on:submit|preventDefault={handleLogin}>
+    <form method="POST" action="?/login" use:enhance={handleEnhance}>
       <Card.Content>
         <div class="flex flex-col gap-6">
           <div class="grid gap-2">
             <Label for="cb-studentid">Institutional ID</Label>
-            <Input id="cb-studentid" bind:value={studentId} required />
-            {#if errors.studentId}
-              <p class="text-xs text-red-500">{errors.studentId[0]}</p>
-            {/if}
+            <!-- Note: name="studentId" is the key for the server -->
+            <Input id="cb-studentid" name="studentId" bind:value={studentId} required />
           </div>
 
           <div class="grid gap-2">
             <div class="flex items-center">
               <Label for="nur-password">Password</Label>
             </div>
-            <Input id="nur-password" bind:value={password} type="password" required />
-            {#if errors.password}
-              <p class="text-xs text-red-500">{errors.password[0]}</p>
-            {/if}
-
+            <Input id="nur-password" name="password" bind:value={password} type="password" required />
           </div>
         </div>
       </Card.Content>
+
       <Card.Footer class="flex flex-col mt-2 w-full">
-        <Card.Action class="w-full">
+        <div class="w-full">
           <Button type="submit" class="w-full" disabled={isLoading}>
             {#if isLoading}
               <LoaderCircle class="mr-2 h-4 w-4 animate-spin" />
@@ -113,13 +62,11 @@
               Login
             {/if}
           </Button>
-        </Card.Action>
-        {#if message}
-          <p
-            class="text-sm
-            {message.includes("success") ? "text-green-500" : "text-blue-500"}"
-          >
-            {message}
+        </div>
+
+        {#if form?.message}
+          <p class="text-sm mt-2 {form?.success ? 'text-green-500' : 'text-blue-500'}">
+            {form.message}
           </p>
         {/if}
       </Card.Footer>

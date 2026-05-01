@@ -6,9 +6,9 @@
 
 @theme {
   --customWhite: #f5f5e6;
+  --whiteStone: #f0e8f0;
   --customGold: #F5870D;
   --darkTheme: #151515;
-  /* --blendedMagenta: #ff0087 */
 }
 
 :root {
