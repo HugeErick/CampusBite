@@ -1,26 +1,26 @@
 <script lang="ts">
   //homepage
-  import { onMount } from 'svelte';
+  import { onMount } from "svelte";
   import { page } from "$app/state";
   import { toast } from "@zerodevx/svelte-toast";
-  import { goto } from '$app/navigation';
+  import { goto } from "$app/navigation";
   import {
     Ticket,
     Clock3,
     UtensilsCrossed,
     ChevronRight
-  } from '@lucide/svelte/icons';
+  } from "@lucide/svelte/icons";
   import { Button } from "$lib/components/ui/button/index.js";
 
   const steps = [
-    'Obtén tu turno para realizar tu pedido',
-    'Selecciona tus productos del menú',
-    'Paga y recibe tu código QR',
-    'Recoge tu pedido cuando sea tu turno'
+    "Obtén tu turno para realizar tu pedido",
+    "Selecciona tus productos del menú",
+    "Paga y recibe tu código QR",
+    "Recoge tu pedido cuando sea tu turno"
   ];
 
   let currentTurn = 5;
-  let nextTurnIn = '4:02';
+  let nextTurnIn = "4:02";
 
   let showMyTurn = false;
   let myTurn = 13;
@@ -45,7 +45,7 @@
   />
 </svelte:head>
 
-<div class="z-10 min-h-screen w-full pb-28">
+<div class="z-10 min-h-screen pb-24">
   <div class="mx-auto space-y-6 pb-6">
     <!-- Header -->
     <section class="rounded-b-3xl bg-(--customGold) px-6 py-8 text-white shadow-md text-center">
@@ -91,7 +91,7 @@
 
       <!-- Botón ver menú -->
       <Button
-        onclick={() => goto('/menu')}
+        onclick={() => goto("/home/menu")}
         class="flex w-full items-center justify-center gap-3 rounded-2xl border-2 border-orange-400 bg-(--whiteStone) dark:bg-slate-800 px-6 py-5 text-xl font-medium text-(--customGold) transition hover:bg-orange-50"
       >
         <UtensilsCrossed class="h-6 w-6" />
