@@ -1,7 +1,7 @@
 <script lang="ts">
   // login page
   import { onMount } from "svelte";
-  import { page } from "$app/stores";
+  import { page } from "$app/state";
   import { toast } from "@zerodevx/svelte-toast";
   import { enhance } from "$app/forms";
   import { Button } from "$lib/components/ui/button/index.js";
@@ -10,8 +10,9 @@
   import * as Card from "$lib/components/ui/card/index.js";
   import { LoaderCircle, Coffee } from "@lucide/svelte";
   import type { SubmitFunction } from "@sveltejs/kit";
+  import type { LoginForm } from "./+page.server";
 
-  let { form } = $props();
+  let { form } = $props<{ form: LoginForm | null }>();
   let studentId = $state(""); // bind:value works better with $state in Svelte 5
   let password = $state("");
   let isLoading = $state(false);
@@ -25,9 +26,9 @@
   };
 
   onMount(() => {
-    if ($page.url.searchParams.get("goodbye") === "1" ){
+    if (page.url.searchParams.get("goodbye") === "1" ){
       toast.push("Sesión cerrada");
-      const url = new URL($page.url);
+      const url = new URL(page.url);
       url.searchParams.delete("goodbye");
       history.replaceState({}, "", url.toString());
     }
@@ -76,9 +77,8 @@
             {/if}
           </Button>
         </div>
-
         {#if form?.message}
-          <p class="text-sm mt-2 {form?.success ? 'text-green-500' : 'text-blue-500'}">
+          <p class="text-sm mt-2 {form?.success ? 'text-green-500' : 'text-red-500'}">
             {form.message}
           </p>
         {/if}

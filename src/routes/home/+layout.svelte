@@ -1,12 +1,12 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
-  import { page } from "$app/stores";
+  import { page } from "$app/state";
   import { House, Info, Ellipsis } from "@lucide/svelte";
   import { Button } from "$lib/components/ui/button/index.js";
 
   let { children } = $props();
 
-  const isActive = (path: string) => $page.url.pathname === path;
+  const isActive = (path: string) => page.url.pathname === path;
 </script>
 
 {@render children?.()}

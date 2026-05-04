@@ -4,6 +4,11 @@ import { fail, redirect } from '@sveltejs/kit';
 import type { Actions } from './$types';
 import { createServerClient } from "$lib/supabase/server";
 
+export type LoginForm = {
+  success: boolean;
+  message: string;
+};
+
 export const actions: Actions = {
   login: async ({ request, cookies }) => {
     const supabase = createServerClient();
@@ -12,7 +17,7 @@ export const actions: Actions = {
     const studentId = data.get('studentId');
 
     if (!studentId) {
-      return fail(400, { message: 'ID is required' });
+      return fail(400, { success: false, message: 'ID is required' });
     }
 
     // Verify with Supabase
@@ -23,7 +28,7 @@ export const actions: Actions = {
     .single();
 
     if (error || !user) {
-      return fail(401, { success:false,  message: 'Invalid Institutional ID' });
+      return fail(401, { success: false,  message: 'Invalid Institutional ID' });
     }
 
     // Set the cookie (valid for 7 days)

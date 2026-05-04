@@ -1,1 +1,1 @@
-pnpm exec playwright test login db --reporter=list
+pnpm exec playwright test login db about --reporter=list

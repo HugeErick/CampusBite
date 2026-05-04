@@ -1,7 +1,7 @@
 <script lang="ts">
   //homepage
   import { onMount } from 'svelte';
-  import { page } from "$app/stores";
+  import { page } from "$app/state";
   import { toast } from "@zerodevx/svelte-toast";
   import { goto } from '$app/navigation';
   import {
@@ -27,9 +27,9 @@
   let estimatedWait = 24;
   
   onMount(() => {
-    if ($page.url.searchParams.get("welcome") === "1") {
+    if (page.url.searchParams.get("welcome") === "1") {
       toast.push("Bienvenido de vuelta");
-      const url = new URL($page.url);
+      const url = new URL(page.url);
       url.searchParams.delete("welcome");
       goto(url.toString(), { replaceState: true, noScroll: true});
     }

@@ -1,31 +1,31 @@
 <script lang="ts">
   //about page
-  import { Clock, GlassWater, CreditCard, Coffee } from '@lucide/svelte/icons';
+  import { Clock, GlassWater, CreditCard, Coffee } from "@lucide/svelte/icons";
 
   const features = [
     {
-      title: 'Sistema de Turnos Inteligente',
-      description: 'Evita las filas y conoce tu tiempo de espera en tiempo real.',
+      title: "Sistema de Turnos Inteligente",
+      description: "Evita las filas y conoce tu tiempo de espera en tiempo real.",
       icon: Clock
     },
     {
-      title: 'Pedidos Personalizados',
-      description: 'Personaliza tus productos con extras y opciones adicionales.',
+      title: "Pedidos Personalizados",
+      description: "Personaliza tus productos con extras y opciones adicionales.",
       icon: GlassWater
     },
     {
-      title: 'Pago Seguro',
-      description: 'Tus datos de pago están protegidos con un proceso confiable y seguro.',
+      title: "Pago Seguro",
+      description: "Tus datos de pago están protegidos con un proceso confiable y seguro.",
       icon: CreditCard
     }
   ];
 
   const steps = [
-    'Inicia sesión con tus credenciales institucionales.',
-    'Obtén tu turno y explora el menú disponible.',
-    'Personaliza tus productos y añádelos al carrito.',
-    'Realiza el pago de forma segura.',
-    'Recibe tu código QR y recoge tu pedido cuando esté listo.'
+    "Inicia sesión con tus credenciales institucionales.",
+    "Obtén tu turno y explora el menú disponible.",
+    "Personaliza tus productos y añádelos al carrito.",
+    "Realiza el pago de forma segura.",
+    "Recibe tu código QR y recoge tu pedido cuando esté listo."
   ];
 </script>
 
