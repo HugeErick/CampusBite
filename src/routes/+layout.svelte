@@ -1,6 +1,8 @@
 <script lang="ts">
   //layout
   import "../app.css";
+  import favicon from "$lib/assets/favicon.svg";
+  import { SvelteToast } from "@zerodevx/svelte-toast";
   import { ModeWatcher, toggleMode} from "mode-watcher";
   import {
     Sun, Moon, 
@@ -17,10 +19,11 @@
 </script>
 
 <svelte:head>
-  <!-- <link rel="icon" href={favicon} /> -->
+  <link rel="icon" href={favicon} />
 </svelte:head>
 
 <ModeWatcher />
+<SvelteToast />
 
 <div
   class="

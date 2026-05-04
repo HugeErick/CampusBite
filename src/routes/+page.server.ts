@@ -1,12 +1,13 @@
-
 // routes/pageserver aka login page server
 
 import { fail, redirect } from '@sveltejs/kit';
 import type { Actions } from './$types';
-import { supabase } from '$lib/supabase/client';
+import { createServerClient } from "$lib/supabase/server";
 
 export const actions: Actions = {
   login: async ({ request, cookies }) => {
+    const supabase = createServerClient();
+
     const data = await request.formData();
     const studentId = data.get('studentId');
 
@@ -33,6 +34,6 @@ export const actions: Actions = {
       maxAge: 60 * 60 * 24 * 7
     });
 
-    throw redirect(303, '/home');
+    redirect(303, "/home?welcome=1");
   }
 };

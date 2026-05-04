@@ -1,5 +1,8 @@
 <script lang="ts">
   //homepage
+  import { onMount } from 'svelte';
+  import { page } from "$app/stores";
+  import { toast } from "@zerodevx/svelte-toast";
   import { goto } from '$app/navigation';
   import {
     Ticket,
@@ -22,13 +25,15 @@
   let showMyTurn = false;
   let myTurn = 13;
   let estimatedWait = 24;
-  let hasTurn = false;
-
-  function handleGetTurn() {
-    if (hasTurn) return;
-    hasTurn = true;
-    showMyTurn = true;
-  }
+  
+  onMount(() => {
+    if ($page.url.searchParams.get("welcome") === "1") {
+      toast.push("Bienvenido de vuelta");
+      const url = new URL($page.url);
+      url.searchParams.delete("welcome");
+      goto(url.toString(), { replaceState: true, noScroll: true});
+    }
+  });
 </script>
 
 <svelte:head>

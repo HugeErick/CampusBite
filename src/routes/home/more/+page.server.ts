@@ -1,3 +1,5 @@
+// more-server
+
 import { redirect } from "@sveltejs/kit";
 import type { PageServerLoad, Actions } from "./$types";
 
@@ -14,6 +16,6 @@ export const actions: Actions = {
   // This must be an action to handle the button click via a form
   logout: async ({ cookies }) => {
     cookies.delete("session_id", { path: "/" });
-    throw redirect(303, "/");
+    redirect(303, "/?goodbye=1");
   }
 };

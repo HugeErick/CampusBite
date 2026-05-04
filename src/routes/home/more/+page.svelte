@@ -1,6 +1,6 @@
 <script lang="ts">
   // more page
-  import { goto } from '$app/navigation';
+  import { goto } from "$app/navigation";
   import { enhance } from "$app/forms";
   import { Button } from "$lib/components/ui/button/index.js";
   let { data } = $props();
@@ -11,26 +11,26 @@
     Bell,
     LogOut,
     ChevronRight,
-  } from '@lucide/svelte';
+  } from "@lucide/svelte";
 
   const options = [
     {
-      title: 'Mi Perfil',
-      desc: 'Ver y editar información personal',
+      title: "Mi Perfil",
+      desc: "Ver y editar información personal",
       icon: User,
-      route: '/profile'
+      route: "/profile"
     },
     {
-      title: 'Historial de Pedidos',
-      desc: 'Ver tus pedidos anteriores',
+      title: "Historial de Pedidos",
+      desc: "Ver tus pedidos anteriores",
       icon: Clock,
-      route: '/orders'
+      route: "/orders"
     },
     {
-      title: 'Notificaciones',
-      desc: 'Configurar alertas y avisos',
+      title: "Notificaciones",
+      desc: "Configurar alertas y avisos",
       icon: Bell,
-      route: '/notifications'
+      route: "/notifications"
     },
   ];
 
@@ -90,7 +90,7 @@
         <!-- LOGOUT -->
         <form method="post" action="?/logout" use:enhance>
           <Button
-            class="w-full border border-red-400 text-red-500 rounded-xl py-3 mt-4 hover:bg-red-50 transition flex items-center justify-center gap-2"
+            class="w-full border border-red-400 text-red-500 rounded-xl py-3 mt-4 hover:bg-red-400 transition flex items-center justify-center gap-2"
             type="submit"
           >
             <LogOut size={18} />

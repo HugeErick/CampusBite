@@ -1,11 +1,15 @@
 <script lang="ts">
+  // login page
+  import { onMount } from "svelte";
+  import { page } from "$app/stores";
+  import { toast } from "@zerodevx/svelte-toast";
   import { enhance } from "$app/forms";
   import { Button } from "$lib/components/ui/button/index.js";
   import { Label } from "$lib/components/ui/label/index.js";
   import { Input } from "$lib/components/ui/input/index.js";
   import * as Card from "$lib/components/ui/card/index.js";
   import { LoaderCircle, Coffee } from "@lucide/svelte";
-  import type { SubmitFunction } from "./$types";
+  import type { SubmitFunction } from "@sveltejs/kit";
 
   let { form } = $props();
   let studentId = $state(""); // bind:value works better with $state in Svelte 5
@@ -19,6 +23,15 @@
       await update();
     };
   };
+
+  onMount(() => {
+    if ($page.url.searchParams.get("goodbye") === "1" ){
+      toast.push("Sesión cerrada");
+      const url = new URL($page.url);
+      url.searchParams.delete("goodbye");
+      history.replaceState({}, "", url.toString());
+    }
+  });
 </script>
 
 <section class="w-screen h-screen">
